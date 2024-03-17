@@ -12,3 +12,4 @@ def create_threads(function_with_args):
 
     for t in threads:
         t.join()
+
