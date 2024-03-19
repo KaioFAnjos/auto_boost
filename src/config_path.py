@@ -1,5 +1,5 @@
 import configparser
-
+import log
 config_path = 'C:/ws-python/auto_boost/path/path.ini'
 
 def load_config():
@@ -16,10 +16,10 @@ def load_config():
         
         return configs
     except FileNotFoundError:
-        print(f"Arquivo [{config_path}] não foi encontrado...")
+        log.error(f"Arquivo [{config_path}] não foi encontrado...")
         return {}
     except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+        log.error(f"Ocorreu um erro: {e}")
         return {}
 
 def get_value(configs, key):    

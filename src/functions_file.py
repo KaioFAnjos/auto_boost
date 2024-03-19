@@ -2,33 +2,34 @@ import config_path
 import os
 import shutil
 import util
+import log
 
 def delete_arq(file_path):
     try:
         os.remove(file_path)
-        print(f"Arquivo {file_path} apagado com sucesso")
+        log.info(f"Arquivo {file_path} apagado com sucesso")
     except FileNotFoundError:
-        print("Arquivo nao encontrado...")
+        log.error("Arquivo nao encontrado...")
     except Exception as e:
-        print(f"Erro ao apagar o arquivo [{file_path}]: {e}")
+        log.error(f"Erro ao apagar o arquivo [{file_path}]: {e}")
 
 def mv_file(source_path, destination_path):
     try:
         shutil.move(source_path, destination_path)
-        print(f"Movendo arquivo: {source_path} --> {destination_path}")
+        log.info(f"Movendo arquivo: {source_path} --> {destination_path}")
     except FileNotFoundError:
-        print(f"O arquivo [{source_path}] nao foi encontrado...")
+        log.error(f"O arquivo [{source_path}] nao foi encontrado...")
     except Exception as e:
-        print(f"Ocorre um erro ao mover o arquivo {source_path}: \n{e}")
+        log.error(f"Ocorre um erro ao mover o arquivo {source_path}: \n{e}")
 
 def delete_dir(dir_path):
     try:
         shutil.rmtree(dir_path)
-        print(f"Diretorio apagado: {dir_path}")
+        log.info(f"Diretorio apagado: {dir_path}")
     except FileNotFoundError:
-        print(f"O diretorio [{dir_path}] nao foi encontrado...")
+        log.error(f"O diretorio [{dir_path}] nao foi encontrado...")
     except Exception as e:
-        print(f"Erro ao apagar diretorio [{dir_path}]: \n{e}")
+        log.error(f"Erro ao apagar diretorio [{dir_path}]: \n{e}")
 
 def clear_dir(dir_path):
     try:
@@ -41,13 +42,14 @@ def clear_dir(dir_path):
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
 
-        print(f"Conteudo do diretorio [{dir_path}] apagado com sucesso.")
+        log.info(f"Conteudo do diretorio [{dir_path}] apagado com sucesso.")
     except FileNotFoundError:
-        print(f"O diretorio [{dir_path}] nao foi encontrado...")
+        log.error(f"O diretorio [{dir_path}] nao foi encontrado...")
     except Exception as e:
-        print(f"Erro ao apagar limpar o diretorio [{dir_path}]: \n{e}")
+        log.error(f"Erro ao apagar o diretorio [{dir_path}]...")
 
 def main(configs):
+    print("\tINICIANDO CLEAR FILES")
     list_thread = []
     for key in configs:
         dir = config_path.get_value(configs, key)

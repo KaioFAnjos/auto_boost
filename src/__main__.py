@@ -20,6 +20,10 @@ def main():
     elif args.execute == 'clear_process':
         print("\tAUTO_BOOST --- INICIANDO CLEAR PROCESS")
         clear_process()
+    else:
+        print("\tAUTO_BOOST --- INICIANDO TODOS OS PROCESSOS")
+        clear_files(config())
+        clear_process()
 
 
 if __name__ == "__main__":
