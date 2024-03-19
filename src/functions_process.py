@@ -12,7 +12,7 @@ def close_process(process_name=[]):
         except (psutil.NoSuchProcess,  psutil.ZombieProcess):
             print("Processo não existe mais...")
         except psutil.AccessDenied:
-            print("Voce nao tem permissao para encerrar este processo...")
+            print(f"Processo [{process.name()}] sem permissão para encerrar...")
 
 def ls_process():
     for process in psutil.process_iter():
