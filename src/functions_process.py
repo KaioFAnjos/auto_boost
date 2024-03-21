@@ -1,20 +1,32 @@
 import psutil
 import log
 import re
+import subprocess
 
 def terminate_processes(process_name=[]):
+    try:
+        for name in process_name:
+            if is_process_running(name):
+                subprocess.run(["powershell", "-Command", f"Stop-Process -Name {name.replace('.exe', '')} -Force"], check=True)
+                log.info(f"Processo [{name}] encerrado com sucesso.")
+
+    except subprocess.CalledProcessError:
+        log.warning(f"Não foi possível encerrar o processo [{name}] com privilégios elevados...")
+    except Exception as e:
+        log.warning(f"Erro ao tentar encerrar o processo [{name}]: {e}")
+
+def is_process_running(process_name):
     for process in psutil.process_iter():
         try:
-            for name in process_name:
-                if process.name() == name:
-                    process.terminate()
-                    log.info(f"Processo [{process.name()}] encerrado com sucesso.")
+            if process_name.lower() == process.name().lower():
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            log.warning("Processo não existe, não tem permissão para acessar ou é um processo zumbi")
+            continue
 
-        except (psutil.NoSuchProcess,  psutil.ZombieProcess):
-            log.warning("Processo não existe mais...")
-        except psutil.AccessDenied:
-            log.warning(f"Processo [{process.name()}] sem permissão para encerrar...")
-
+        log.warning(f"O processo [{process_name}] não está em execução no momento...")
+        return False
+       
 def list_processes():
     process_info_pattern = re.compile(r"pid=(\d+),\s+name='([^']+)',\s+status='([^']+)'")
     for process in psutil.process_iter():
